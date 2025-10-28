@@ -1,15 +1,47 @@
 pipeline {
-    agent any 
+    agent any
+
+    tools {
+        nodejs 'nodejs'
+    }
 
     stages {
-        stage ('VM node version') {
+
+        stage ('Repository Scanning') {
             steps {
-                sh '''
-                    node -v 
-                    npm -v
-                
-                '''
+                sh 'npm install --no-audit' 
             }
         }
+
+        stage ('Install Dependencies') {
+            steps {
+                sh 'npm install --no-audit' 
+            }
+        }
+
+        /*stage ('NPM Dependency Audit') {
+            steps {
+                sh '''
+                    npm audit --audit-level=critical
+                    echo $?
+                    '''
+            }
+        }*/
+
+        stage ('OWASP Dependenccies Check') {
+
+            steps {
+                dependencyCheck additionalArguments: '''
+                    --scan ./
+                    --out ./
+                    --format XML
+                    --disableYarnAudit \
+                    --prettyPrint
+                  ''', odcInstallation: 'owasp-dc'
+                dependencyCheckPublisher failedTotalCritical: 1, pattern: 'dependency-check-report.xml', stopBuild: true               
+                }
+        }
+        
+    
     }
 }
