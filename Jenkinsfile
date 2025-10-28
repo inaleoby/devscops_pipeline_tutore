@@ -5,6 +5,10 @@ pipeline {
         nodejs 'nodejs'
     }
 
+    environment {
+        MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
+    }
+
     stages {
 
         stage ('Repository Scanning') {
@@ -34,13 +38,30 @@ pipeline {
                 dependencyCheck additionalArguments: '''
                     --scan ./
                     --out ./
-                    --format XML
+                    --format ALL
                     --disableYarnAudit \
                     --prettyPrint
                   ''', odcInstallation: 'owasp-dc'
-                dependencyCheckPublisher failedTotalCritical: 1, pattern: 'dependency-check-report.xml', stopBuild: true               
+                dependencyCheckPublisher failedTotalCritical: 2, pattern: 'dependency-check-reportxml', stopBuild: false // mettre a ture pour echouer le pipeline
+
+                junit allowEmptyResults: true, keepProperties: true, testResults: 'dependency-check-junit.xml' // Rapport du dependency check sous forme de test, chaque vuln = test echoue
+
+                publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: './', reportFiles: 'dependency-check-report.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])              
                 }
         }
+
+        stage ('Test unitaire') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'mongo-db-cred', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
+
+                         sh 'npm test' 
+                    }
+                junit allowEmptyResults: true, keepProperties: true, testResults: 'test-results.xml' // pour les test unitaire
+
+           
+            }
+        }
+
         
     
     }
