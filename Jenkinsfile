@@ -10,6 +10,7 @@ pipeline {
         MONGO_DB_CRED = credentials('mongo-db-cred') //username & password separeted by : 
         MONGO_USERNAME = credentials('mongo-db-username')
         MONGO_PASSWORD = credentials('mongo-db-password')
+        SONAR_SCANNER_HOME = tool 'sonarqube-scanner'
     }
 
     stages {
@@ -70,6 +71,21 @@ pipeline {
     
     }
 
+    stage ('SAST - SonarQube') {
+        steps {
+               
+                sh '''
+                 $SONAR_SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.projectKey=devsecops-tutore-project \
+                    -Dsonar.sources=. \
+                    -Dsonar.host.url=http://172.19.30.20:9090 \
+                    -Dsonar.login=sqp_21233a29d9033487da21552754a24fa9712e4502
+                
+                '''
+            }
+        }
+
+
 
 }
 
@@ -78,7 +94,7 @@ pipeline {
     always{
 
         junit allowEmptyResults: true, keepProperties: true, testResults: 'dependency-check-junit.xml' // Rapport du dependency check sous forme de test, chaque vuln = test echoue
-        
+
         publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: './', reportFiles: 'dependency-check-report.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true]) //  Rapport du dependency check sous HTML
 
         junit allowEmptyResults: true, keepProperties: true, testResults: 'test-results.xml' // pour les test unitaire
