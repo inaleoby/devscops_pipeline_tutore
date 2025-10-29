@@ -39,6 +39,7 @@ pipeline {
         stage ('OWASP Dependenccies Check') {
 
             steps {
+            
                 dependencyCheck additionalArguments: '''
                     --scan ./
                     --out ./
@@ -73,8 +74,12 @@ pipeline {
 
     stage ('SAST - SonarQube') {
         steps {
-               
-                sh '''
+
+            timeout (time: 3600, unit: 'SECONDS'){
+
+            withSonarQubeEnv('sonarqube') {
+
+            sh '''
                  $SONAR_SCANNER_HOME/bin/sonar-scanner \
                     -Dsonar.projectKey=devsecops-tutore-project \
                     -Dsonar.sources=app.js \
@@ -83,6 +88,14 @@ pipeline {
                     -Dsonar.login=sqp_21233a29d9033487da21552754a24fa9712e4502
                 
                 '''
+
+            }
+
+            waitForQualityGate (abortPipeline: true) 
+            
+            }
+               
+
             }
         }
 
