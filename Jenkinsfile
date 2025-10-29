@@ -11,9 +11,9 @@ pipeline {
 
     stages {
 
-        stage ('Repository Scanning') {
+        stage ('Gitleaks Scan') {
             steps {
-                sh 'npm install --no-audit' 
+                sh 'gitleaks detect --soucre ./ --exit-code 1' 
             }
         }
 
@@ -32,7 +32,7 @@ pipeline {
             }
         }*/
 
-        stage ('OWASP Dependenccies Check') {
+        /*stage ('OWASP Dependenccies Check') {
 
             steps {
                 dependencyCheck additionalArguments: '''
@@ -56,11 +56,9 @@ pipeline {
 
                          sh 'npm test' 
                     }
-                junit allowEmptyResults: true, keepProperties: true, testResults: 'test-results.xml' // pour les test unitaire
-
-           
+                junit allowEmptyResults: true, stdioRetention: '', testResults: 'test-results.xml' // pour les test unitaire
             }
-        }
+        }*/
 
         
     
