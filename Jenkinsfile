@@ -60,6 +60,20 @@ pipeline {
             }
         }*/
 
+
+        stage ('Code Coverage') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'mongo-db-cred', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
+
+                    catchError(buildResult: 'SUCCESS', message: 'ERROR !! IT WILL BE FIXED IN NEXT VERSION', stageResult: 'UNSTABLE') {
+                        sh 'npm run coverage'
+                    }    
+                }
+                
+        }
+        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'coverage/lcov-report/', reportFiles: 'index.html', reportName: 'Code covergae HTML Report', reportTitles: '', useWrapperFileDirectly: true])  // Reprot for coverage
+
+
         
     
     }
