@@ -13,7 +13,7 @@ pipeline {
 
         stage ('Gitleaks Scan') {
             steps {
-                sh 'gitleaks detect --soucre ./ --exit-code 1' 
+                sh 'gitleaks detect --source ./ --exit-code 1' 
             }
         }
 
