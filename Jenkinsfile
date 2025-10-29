@@ -78,6 +78,7 @@ pipeline {
                  $SONAR_SCANNER_HOME/bin/sonar-scanner \
                     -Dsonar.projectKey=devsecops-tutore-project \
                     -Dsonar.sources=. \
+                     -Dsonar.sonar.javascript.lcov.reportPaths=./coverage/lcov.info
                     -Dsonar.host.url=http://172.19.30.20:9090 \
                     -Dsonar.login=sqp_21233a29d9033487da21552754a24fa9712e4502
                 
