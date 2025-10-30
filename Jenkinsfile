@@ -99,13 +99,13 @@ pipeline {
             steps{
                 sh '''
                     trivy image espoir10/devsecops-tutore:$GIT_COMMIT \
-                        --severety LOW,MEDUIM \
+                        --severity LOW,MEDIUM \
                         --exit-code 0 \
                         --quiet \
                         --format json -o trivy-image-LOW-MEDIUM-results.json 
 
                     trivy image espoir10/devsecops-tutore:$GIT_COMMIT \
-                        --severety HIGH,CRITICAL \
+                        --severity HIGH,CRITICAL \
                         --exit-code 1 \
                         --quiet \
                         --format json -o trivy-image-CRITICAL-results.json 
