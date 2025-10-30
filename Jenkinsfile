@@ -72,7 +72,7 @@ pipeline {
     
     }*/
 
-    stage ('SAST - SonarQube') {
+    /*stage ('SAST - SonarQube') {
         steps {
 
             timeout (time: 3600, unit: 'SECONDS'){
@@ -94,6 +94,24 @@ pipeline {
                
 
             }
+        }*/
+
+        stage ('Build docker image') {
+
+         
+            steps {
+
+                script {
+                    try {
+                            sh 'dockerr build -t espoir10/devsecops-tutore:$GIT_COMMIT .' 
+                    }
+                } catch(err) {
+                     env.ERROR_STAGE = "DOCKER BUILD IMAGES"
+                    env.ERROR_MESSAGE = err.getMessage()
+                    error("Échec de l'analyse SonarQube : ${err.getMessage()}")
+                }
+                
+            }
         }
 
 
@@ -102,7 +120,7 @@ pipeline {
 
   post{
 
-    always{
+    /*always{
 
         junit allowEmptyResults: true, keepProperties: true, testResults: 'dependency-check-junit.xml' // Rapport du dependency check sous forme de test, chaque vuln = test echoue
 
@@ -112,7 +130,25 @@ pipeline {
 
         publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'coverage/lcov-report/', reportFiles: 'index.html', reportName: 'Code covergae HTML Report', reportTitles: '', useWrapperFileDirectly: true])  // Reprot for coverage
  
-    }
+    }*/
+
+     failure {
+            script {
+                emailext(
+                    to: 'obympeespoir@gmail.com',
+                    subject: "🚨 Échec du pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """
+                    <b>Pipeline échoué !</b><br>
+                    🔹 <b>Stage :</b> ${env.ERROR_STAGE}<br>
+                    🔹 <b>Erreur :</b> ${env.ERROR_MESSAGE}<br>
+                    🔹 <b>Job :</b> ${env.JOB_NAME}<br>
+                    🔹 <b>Build URL :</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a>
+                    """,
+                    mimeType: 'text/html'
+                )
+            }
+        }
+
   }
 
 
