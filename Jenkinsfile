@@ -82,7 +82,7 @@ pipeline {
             sh '''
                  $SONAR_SCANNER_HOME/bin/sonar-scanner \
                     -Dsonar.projectKey=devsecops-tutore-project \
-                    -Dsonar.sources=app.js \
+                    -Dsonar.sources=. \
                     -Dsonar.sonar.javascript.lcov.reportPaths=./coverage/lcov.info
                 '''
 
