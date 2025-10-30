@@ -122,7 +122,7 @@ pipeline {
                    
                    trivy convert \
                     --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
-                    --output trivy-image-CRITICAL-results.html trivy-image-CRITICAL.results.json
+                    --output trivy-image-CRITICAL-results.html trivy-image-CRITICAL-results.json
 
                    trivy convert \
                     --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
@@ -131,7 +131,7 @@ pipeline {
                 
                 trivy convert \
                     --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
-                    --output trivy-image-CRITICAL-results.xml trivy-image-CRITICAL.results.json
+                    --output trivy-image-CRITICAL-results.xml trivy-image-CRITICAL-results.json
 
 
                     '''
