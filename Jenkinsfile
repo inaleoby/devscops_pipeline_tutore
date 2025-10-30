@@ -86,7 +86,7 @@ pipeline {
                 script {
                     try {
                         // Erreur volontaire pour tester le mail d’échec
-                        sh 'dockerr build -t espoir10/devsecops-tutore:$GIT_COMMIT .' 
+                        sh 'docker build -t espoir10/devsecops-tutore:$GIT_COMMIT .' 
                     } catch (err) {
                         env.ERROR_STAGE = "DOCKER BUILD IMAGES"
                         env.ERROR_MESSAGE = err.getMessage()
@@ -95,17 +95,67 @@ pipeline {
                 }
             }
         }
+        stage('Trivy vulnerabilty Scanner'){
+            steps{
+                sh '''
+                    trivy image espoir10/devsecops-tutore:$GIT_COMMIT \
+                        --severety LOW,MEDUIM \
+                        --exit-code 0 \
+                        --quiet \
+                        --format json -o trivy-image-LOW-MEDIUM-results.json 
+
+                    trivy image espoir10/devsecops-tutore:$GIT_COMMIT \
+                        --severety HIGH,CRITICAL \
+                        --exit-code 1 \
+                        --quiet \
+                        --format json -o trivy-image-CRITICAL-results.json 
+            
+                '''
+            }
+
+            post{
+                always {
+                    sh '''
+                    trivy convert \
+                    --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+                    --output trivy-image-LOW-MEDIUM-results.html trivy-image-LOW-MEDIUM-results.json 
+                   
+                   trivy convert \
+                    --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+                    --output trivy-image-CRITICAL-results.html trivy-image-CRITICAL.results.json
+
+                   trivy convert \
+                    --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
+                    --output trivy-image-LOW-MEDIUM-results.xml trivy-image-LOW-MEDIUM.results.json
+
+                
+                trivy convert \
+                    --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
+                    --output trivy-image-CRITICAL-results.xml trivy-image-CRITICAL.results.json
+
+
+                    '''
+
+
+                }
+            }
+
+        }
     }
 
     post {
-        /*always {
+        always {
             junit allowEmptyResults: true, keepProperties: true, testResults: 'dependency-check-junit.xml' // Rapport du dependency check sous forme de test
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'dependency-check-report.html', reportName: 'HTML Report'])
             junit allowEmptyResults: true, keepProperties: true, testResults: 'test-results.xml' // tests unitaires
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/lcov-report/', reportFiles: 'index.html', reportName: 'Code Coverage HTML Report'])
-        }*/
 
-        failure {
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'trivy-image-LOW-MEDIUM-results.html', reportName: 'Trivy image LM report'])
+
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'trivy-image-CRITICAL-results.html', reportName: 'Trivy image CRITICAL report'])
+        }
+
+        /*failure {
             script {
                 emailext(
                     to: 'obympeespoir@gmail.com',
@@ -120,6 +170,6 @@ pipeline {
                     mimeType: 'text/html'
                 )
             }
-        }
+        }*/
     }
 }
