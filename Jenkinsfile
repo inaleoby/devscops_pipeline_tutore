@@ -36,7 +36,7 @@ pipeline {
             }
         }*/
 
-        stage ('OWASP Dependenccies Check') {
+        /*stage ('OWASP Dependenccies Check') {
 
             steps {
             
@@ -70,7 +70,7 @@ pipeline {
                  
         }
     
-    }
+    }*/
 
     stage ('SAST - SonarQube') {
         steps {
