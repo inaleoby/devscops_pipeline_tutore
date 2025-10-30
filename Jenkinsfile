@@ -104,9 +104,8 @@ pipeline {
                 script {
                     try {
                             sh 'dockerr build -t espoir10/devsecops-tutore:$GIT_COMMIT .' 
-                    }
-                } catch(err) {
-                     env.ERROR_STAGE = "DOCKER BUILD IMAGES"
+                    } catch(err) {
+                    env.ERROR_STAGE = "DOCKER BUILD IMAGES"
                     env.ERROR_MESSAGE = err.getMessage()
                     error("Échec de l'analyse SonarQube : ${err.getMessage()}")
                 }
