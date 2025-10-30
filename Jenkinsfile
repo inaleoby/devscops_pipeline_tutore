@@ -126,7 +126,7 @@ pipeline {
 
                    trivy convert \
                     --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
-                    --output trivy-image-LOW-MEDIUM-results.xml trivy-image-LOW-MEDIUM.results.json
+                    --output trivy-image-LOW-MEDIUM-results.xml trivy-image-LOW-MEDIUM-results.json
 
                 
                 trivy convert \
