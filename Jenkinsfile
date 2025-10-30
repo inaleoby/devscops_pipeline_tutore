@@ -141,6 +141,16 @@ pipeline {
             }
 
         }
+
+        stage('PUSH IMAGES'){
+            steps{
+
+                withDockerRegistry(credentialsId: 'DOCKER-HUB') {
+                    sh 'docker push espoir10/devsecops-tutore:$GIT_COMMIT'
+
+                }
+            }
+        }
     }
 
     post {
