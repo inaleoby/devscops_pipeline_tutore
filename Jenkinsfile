@@ -47,7 +47,7 @@ pipeline {
                     --disableYarnAudit \
                     --prettyPrint
                   ''', odcInstallation: 'owasp-dc'
-                dependencyCheckPublisher failedTotalCritical: 2, pattern: 'dependency-check-reportxml', stopBuild: false // mettre a ture pour echouer le pipeline
+                dependencyCheckPublisher failedTotalCritical: 2, pattern: 'dependency-check-reportxml', stopBuild: false // mettre a true pour echouer le pipeline
     
                 }
         }
@@ -84,9 +84,6 @@ pipeline {
                     -Dsonar.projectKey=devsecops-tutore-project \
                     -Dsonar.sources=app.js \
                     -Dsonar.sonar.javascript.lcov.reportPaths=./coverage/lcov.info
-                    -Dsonar.host.url=http://172.19.30.20:9090 \
-                    -Dsonar.login=sqp_21233a29d9033487da21552754a24fa9712e4502
-                
                 '''
 
             }
