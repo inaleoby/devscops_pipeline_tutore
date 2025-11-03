@@ -37,7 +37,7 @@ pipeline {
             }
         }*/
 
-        /*stage ('OWASP Dependencies Check') {
+        stage ('OWASP Dependencies Check') {
             steps {
                 dependencyCheck additionalArguments: '''
                     --scan ./ 
@@ -79,7 +79,7 @@ pipeline {
                     waitForQualityGate(abortPipeline: true)
                 }
             }
-        }*/
+        }
 
         stage('Build docker image') {
             steps {
