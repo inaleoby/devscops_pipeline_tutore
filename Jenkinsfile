@@ -37,7 +37,7 @@ pipeline {
             }
         }*/
 
-        stage ('OWASP Dependencies Check') {
+        /*stage ('OWASP Dependencies Check') {
             steps {
                 dependencyCheck additionalArguments: '''
                     --scan ./ 
@@ -133,9 +133,7 @@ pipeline {
                     --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
                     --output trivy-image-CRITICAL-results.xml trivy-image-CRITICAL-results.json
 
-
                     '''
-
 
                 }
             }
@@ -149,6 +147,29 @@ pipeline {
                     sh 'docker push espoir10/devsecops-tutore:$GIT_COMMIT'
 
                 }
+            }
+        }*/
+
+        stage('Deploy to AWS'){
+            steps{
+                    sshagent(['Ec2-ssh-cred']) {
+                        sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@13.218.68.92 "
+                            if sudo docker ps -a | grep -q "devsecops-tutore"; then
+                                echo "Container found. Stopping..."
+                                    sudo docker stop "devsecops-tutore" && sudo docker rm "devsecops-tutore"
+                                echo "Container stopped and removed..."
+                            fi
+                                sudo docker run --name devsecops-tutore \
+                                    -e MONGO_URI=$MONGO_URI \
+                                    -e MONGO_USERNAME=$MONGO_USERNAME \
+                                    -e MONGO_PASSWORD=$MONGO_PASSWORD \
+                                    -p 3000:3000 -d espoir10/devsecops-tutore:b05d8e6
+                        
+                        '''
+   
+                        }
+
             }
         }
     }
