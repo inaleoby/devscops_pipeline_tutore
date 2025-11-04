@@ -166,7 +166,8 @@ pipeline {
                                             -e MONGO_URI=$MONGO_URI \
                                             -e MONGO_USERNAME=$MONGO_USERNAME \
                                             -e MONGO_PASSWORD=$MONGO_PASSWORD \
-                                            -p 3000:3000 -d espoir10/devsecops-tutore:b05d8e6
+                                            -p 3000:3000 -d \
+                                            espoir10/devsecops-tutore:b05d8e6eacfe65efa2a89f7ee9ac1a0d6b705af8
 
                                     "
                                 
