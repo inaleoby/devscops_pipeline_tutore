@@ -156,7 +156,7 @@ pipeline {
                 script {
                             sshagent(['Ec2-ssh-cred']) {
                                 sh '''
-                                ssh -o StrictHostKeyChecking=no ubuntu@13.218.68.92 "
+                                ssh -o StrictHostKeyChecking=no ubuntu@3.82.205.255 "
                                     if sudo docker ps -a | grep -q "devsecops-tutore"; then
                                         echo "Container found. Stopping..."
                                             sudo docker stop "devsecops-tutore" && sudo docker rm "devsecops-tutore"
@@ -179,6 +179,26 @@ pipeline {
 
             }
         }
+
+
+        stage('DAST -OWASP ZAP '){
+            steps{
+                sh '''
+
+                    chmod 777 $(pwd)
+                    docker run -v $(pwd):/zap/wrk/:rw ghcr.io/zaproxy/zaproxy zap-api-scan.py \
+                    -t http://3.82.205.255:3000/api-docs/ \
+                    -f openapi \
+                    -r zap_report.html \
+                    -j zap_json_report.json \
+                    -x zap_xml_report.xml 
+                
+                '''
+
+            }
+        }
+
+
     }
 
     post {
@@ -187,6 +207,8 @@ pipeline {
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'dependency-check-report.html', reportName: 'HTML Report'])
             junit allowEmptyResults: true, keepProperties: true, testResults: 'test-results.xml' // tests unitaires
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/lcov-report/', reportFiles: 'index.html', reportName: 'Code Coverage HTML Report'])
+
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/lcov-report/', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP DAST REPORT'])
 
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'trivy-image-LOW-MEDIUM-results.html', reportName: 'Trivy image LM report'])
 
