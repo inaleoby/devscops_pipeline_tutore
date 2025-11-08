@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<context>
+    <name>IgnoreAlerts</name>
+    <includeInContext>
+        <!-- Inclure tout sauf ce qu'on veut ignorer -->
+        <regex>.*</regex>
+    </includeInContext>
+
+    <excludeFromContext>
+        <!-- URL à ignorer complètement -->
+        <regex>http://3\.82\.205\.255:3000/</regex>
+        <regex>http://3\.82\.205\.255:3000/api-docs/.*</regex>
+        <regex>http://3\.82\.205\.255:3000/latest/meta-data/.*</regex>
+        <regex>http://3\.82\.205\.255:3000/computeMetadata/v1/.*</regex>
+        <regex>http://3\.82\.205\.255:3000/planet</regex>
+        <regex>http://3\.82\.205\.255:3000/ready</regex>
+        <regex>http://3\.82\.205\.255:3000/os</regex>
+        <regex>http://3\.82\.205\.255:3000/live</regex>
+    </excludeFromContext>
+
+    <forcedUser>
+        <name>ignoreUser</name>
+        <enabled>false</enabled>
+    </forcedUser>
+
+    <alertFilters>
+        <!-- Ignorer tous les types d’alertes sur les URLs exclues -->
+        <alertFilter>
+            <ruleId>100001</ruleId> <!-- Unexpected Content-Type -->
+            <url>http://3\.82\.205\.255:3000/.*</url>
+            <newLevel>IGNORE</newLevel>
+        </alertFilter>
+        <alertFilter>
+            <ruleId>10020</ruleId> <!-- Missing Anti-clickjacking Header -->
+            <url>http://3\.82\.205\.255:3000/</url>
+            <newLevel>IGNORE</newLevel>
+        </alertFilter>
+        <alertFilter>
+            <ruleId>10021</ruleId> <!-- X-Content-Type-Options Header Missing -->
+            <url>http://3\.82\.205\.255:3000/.*</url>
+            <newLevel>IGNORE</newLevel>
+        </alertFilter>
+        <alertFilter>
+            <ruleId>10037</ruleId> <!-- Server Leaks Info via X-Powered-By -->
+            <url>http://3\.82\.205\.255:3000/.*</url>
+            <newLevel>IGNORE</newLevel>
+        </alertFilter>
+        <alertFilter>
+            <ruleId>10038</ruleId> <!-- CSP Header Not Set -->
+            <url>http://3\.82\.205\.255:3000/</url>
+            <newLevel>IGNORE</newLevel>
+        </alertFilter>
+        <alertFilter>
+            <ruleId>10063</ruleId> <!-- Permissions Policy Header Not Set -->
+            <url>http://3\.82\.205\.255:3000/</url>
+            <newLevel>IGNORE</newLevel>
+        </alertFilter>
+        <alertFilter>
+            <ruleId>10098</ruleId> <!-- Cross-Domain Misconfiguration -->
+            <url>http://3\.82\.205\.255:3000/.*</url>
+            <newLevel>IGNORE</newLevel>
+        </alertFilter>
+        <alertFilter>
+            <ruleId>90003</ruleId> <!-- Sub Resource Integrity Attribute Missing -->
+            <url>http://3\.82\.205\.255:3000/.*</url>
+            <newLevel>IGNORE</newLevel>
+        </alertFilter>
+        <alertFilter>
+            <ruleId>90004</ruleId> <!-- Insufficient Site Isolation Against Spectre -->
+            <url>http://3\.82\.205\.255:3000/.*</url>
+            <newLevel>IGNORE</newLevel>
+        </alertFilter>
+    </alertFilters>
+</context>
