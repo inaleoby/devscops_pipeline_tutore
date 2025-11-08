@@ -192,7 +192,8 @@ pipeline {
                     -r zap_report.html \
                     -j zap_json_report.json \
                     -x zap_xml_report.xml \
-                    -c IgnoreAlerts.context
+                    -c zap_ignore.rules \
+                    -I ".*"
                 
                 '''
 
