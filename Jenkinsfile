@@ -191,7 +191,8 @@ pipeline {
                     -f openapi \
                     -r zap_report.html \
                     -j zap_json_report.json \
-                    -x zap_xml_report.xml 
+                    -x zap_xml_report.xml \
+                    -c zap_ignore_rules
                 
                 '''
 
@@ -208,7 +209,7 @@ pipeline {
             junit allowEmptyResults: true, keepProperties: true, testResults: 'test-results.xml' // tests unitaires
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/lcov-report/', reportFiles: 'index.html', reportName: 'Code Coverage HTML Report'])
 
-            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/lcov-report/', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP DAST REPORT'])
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP DAST REPORT'])
 
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'trivy-image-LOW-MEDIUM-results.html', reportName: 'Trivy image LM report'])
 
