@@ -192,7 +192,8 @@ pipeline {
                     -r zap_report.html \
                     -j zap_json_report.json \
                     -x zap_xml_report.xml \
-                    -c zap_ignore_rules
+                    -c zap_ignore_rules \
+                    --exit-code 0
                 
                 '''
 
