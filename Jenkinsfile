@@ -20,8 +20,8 @@ pipeline {
                  sh '''
             
                          gitleaks detect --source ./ \
-                            --report-path=gitleaks-report.html \
-                            --report-format=html \
+                            --report-path=gitleaks-report.json \
+                            --report-format=json \
                             --exit-code 0
         '''
             }
@@ -156,7 +156,7 @@ pipeline {
             }
         }*/
 
-        stage('Deploy to AWS'){
+        /*stage('Deploy to AWS'){
             steps{
 
                 script {
@@ -184,8 +184,7 @@ pipeline {
                      }
 
             }
-        }
-
+        }*/
 
         /*stage('DAST -OWASP ZAP '){
             steps{
