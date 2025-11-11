@@ -23,7 +23,8 @@ pipeline {
                             --report-path=gitleaks-report.json \
                             --report-format=json \
                             --exit-code 0
-        '''
+                    
+                '''
             }
         }
         
@@ -43,7 +44,7 @@ pipeline {
             }
         }*/
 
-        /*stage ('OWASP Dependencies Check') {
+        stage ('OWASP Dependencies Check') {
             steps {
                 dependencyCheck additionalArguments: '''
                     --scan ./ 
@@ -71,7 +72,7 @@ pipeline {
             }
         }
 
-        stage ('SAST - SonarQube') {
+        /*stage ('SAST - SonarQube') {
             steps {
                 timeout(time: 3600, unit: 'SECONDS') {
                     withSonarQubeEnv('sonarqube') {
