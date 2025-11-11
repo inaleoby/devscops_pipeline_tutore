@@ -190,7 +190,7 @@ pipeline {
 
                     chmod 777 $(pwd)
                     docker run -v $(pwd):/zap/wrk/:rw ghcr.io/zaproxy/zaproxy zap-api-scan.py \
-                    -t http://3.82.205.255:3000/api-docs/ \
+                    -t http://52.91.193.138/api-docs/ \
                     -f openapi \
                     -r zap_report.html \
                     -j zap_json_report.json \
