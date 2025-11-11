@@ -17,7 +17,13 @@ pipeline {
 
         stage('Gitleaks Scan') {
             steps {
-                sh 'gitleaks detect --source ./ --exit-code 0'
+                 sh '''
+            
+                         gitleaks detect --source ./ \
+                            --report-path=gitleaks-report.html \
+                            --report-format=html \
+                            --exit-code 0
+        '''
             }
         }
         
@@ -181,7 +187,7 @@ pipeline {
         }
 
 
-        stage('DAST -OWASP ZAP '){
+        /*stage('DAST -OWASP ZAP '){
             steps{
                 sh '''
 
@@ -198,7 +204,7 @@ pipeline {
                 '''
 
             }
-        }
+        }*/
 
 
     }
@@ -211,6 +217,7 @@ pipeline {
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/lcov-report/', reportFiles: 'index.html', reportName: 'Code Coverage HTML Report'])
 
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP DAST REPORT'])
+             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'gitleaks-report.html', reportName: 'Gitleaks Report'])
 
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'trivy-image-LOW-MEDIUM-results.html', reportName: 'Trivy image LOW/MEDUIM report'])
 
