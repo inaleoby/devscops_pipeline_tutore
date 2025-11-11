@@ -184,7 +184,7 @@ pipeline {
             }
         }*/
 
-        /*stage('DAST -OWASP ZAP '){
+        stage('DAST -OWASP ZAP '){
             steps{
                 sh '''
 
@@ -201,7 +201,7 @@ pipeline {
                 '''
 
             }
-        }*/
+        }
 
 
     }
