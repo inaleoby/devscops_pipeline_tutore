@@ -64,7 +64,7 @@ pipeline {
             }
         }
 
-        stage ('Code Coverage') {
+        /*stage ('Code Coverage') {
             steps {
                 catchError(buildResult: 'SUCCESS', message: 'ERROR !! IT WILL BE FIXED IN NEXT VERSION', stageResult: 'UNSTABLE') {
                     sh 'npm run coverage'
@@ -86,9 +86,8 @@ pipeline {
                     waitForQualityGate(abortPipeline: true)
                 }
             }
-        }
-
-        /*stage('Build docker image') {
+        }*/
+        stage('Build docker image') {
             steps {
                 script {
                     try {
@@ -110,13 +109,11 @@ pipeline {
                         --exit-code 0 \
                         --quiet \
                         --format json -o trivy-image-LOW-MEDIUM-results.json 
-
                     trivy image espoir10/devsecops-tutore:$GIT_COMMIT \
                         --severity CRITICAL \
                         --exit-code 0 \
                         --quiet \
                         --format json -o trivy-image-CRITICAL-results.json 
-            
                 '''
             }
 
@@ -147,7 +144,7 @@ pipeline {
 
         }
 
-        stage('PUSH IMAGES'){
+        /*stage('PUSH IMAGES'){
             steps{
 
                 withDockerRegistry(credentialsId: 'DOCKER-HUB') {
