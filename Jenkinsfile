@@ -72,7 +72,7 @@ pipeline {
             }
         }
 
-        /*stage ('SAST - SonarQube') {
+        stage ('SAST - SonarQube') {
             steps {
                 timeout(time: 3600, unit: 'SECONDS') {
                     withSonarQubeEnv('sonarqube') {
@@ -88,7 +88,7 @@ pipeline {
             }
         }
 
-        stage('Build docker image') {
+        /*stage('Build docker image') {
             steps {
                 script {
                     try {
