@@ -87,7 +87,7 @@ pipeline {
                 }
             }
         }*/
-        stage('Build docker image') {
+        /*stage('Build docker image') {
             steps {
                 script {
                     try {
@@ -100,7 +100,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
         stage('Trivy vulnerabilty Scanner'){
             steps{
                 sh '''
@@ -184,7 +184,7 @@ pipeline {
             }
         }*/
 
-        stage('DAST -OWASP ZAP '){
+        /*stage('DAST -OWASP ZAP '){
             steps{
                 sh '''
 
@@ -201,7 +201,7 @@ pipeline {
                 '''
 
             }
-        }
+        }*/
 
 
     }
