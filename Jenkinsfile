@@ -64,7 +64,7 @@ pipeline {
             }
         }
 
-        /*stage ('Code Coverage') {
+        stage ('Code Coverage') {
             steps {
                 catchError(buildResult: 'SUCCESS', message: 'ERROR !! IT WILL BE FIXED IN NEXT VERSION', stageResult: 'UNSTABLE') {
                     sh 'npm run coverage'
@@ -86,8 +86,8 @@ pipeline {
                     waitForQualityGate(abortPipeline: true)
                 }
             }
-        }*/
-        /*stage('Build docker image') {
+        }
+        stage('Build docker image') {
             steps {
                 script {
                     try {
@@ -100,7 +100,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
         stage('Trivy vulnerabilty Scanner'){
             steps{
                 sh '''
@@ -144,7 +144,7 @@ pipeline {
 
         }
 
-        /*stage('PUSH IMAGES'){
+        stage('PUSH IMAGES'){
             steps{
 
                 withDockerRegistry(credentialsId: 'DOCKER-HUB') {
@@ -152,9 +152,9 @@ pipeline {
 
                 }
             }
-        }*/
+        }
 
-        /*stage('Deploy to AWS'){
+        stage('Deploy to AWS'){
             steps{
 
                 script {
@@ -182,15 +182,15 @@ pipeline {
                      }
 
             }
-        }*/
+        }
 
-        /*stage('DAST -OWASP ZAP '){
+        stage('DAST -OWASP ZAP '){
             steps{
                 sh '''
 
                     chmod 777 $(pwd)
                     docker run -v $(pwd):/zap/wrk/:rw ghcr.io/zaproxy/zaproxy zap-api-scan.py \
-                    -t http://52.91.193.138/api-docs/ \
+                    -t http://3.87.188.210/api-docs/ \
                     -f openapi \
                     -r zap_report.html \
                     -j zap_json_report.json \
@@ -201,7 +201,7 @@ pipeline {
                 '''
 
             }
-        }*/
+        }
 
 
     }
